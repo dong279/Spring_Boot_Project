@@ -18,7 +18,7 @@ public class BookDTO {
         private String title;
 
         @NotBlank(message = "저자은 필수 입력 항목입니다.")
-        private String auther;
+        private String author;
 
         @NotBlank(message = "ISBN은 필수 입력 항목입니다")
         private String isbn;
@@ -33,7 +33,7 @@ public class BookDTO {
         public Book toEntity(){
             Book book = new Book();
             book.setTitle(this.title);
-            book.setAuthor(this.auther);
+            book.setAuthor(this.author);
             book.setIsbn(this.isbn);
             book.setPrice(this.price);
             book.setPublishDate(this.publishDate);
