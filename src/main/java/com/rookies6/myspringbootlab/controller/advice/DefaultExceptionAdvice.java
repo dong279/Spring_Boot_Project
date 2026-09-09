@@ -1,6 +1,6 @@
 package com.rookies6.myspringbootlab.controller.advice;
 
-import com.rookies6.myspringbootlab.controller.BusinessException;
+import com.rookies6.myspringbootlab.exception.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

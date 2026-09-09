@@ -1,7 +1,8 @@
 package com.rookies6.myspringbootlab.controller;
 
-import com.rookies6.myspringbootlab.entity.Book;
-import com.rookies6.myspringbootlab.repository.BookRepository;
+import com.rookies6.myspringbootlab.controller.dto.BookDTO;
+import com.rookies6.myspringbootlab.service.BookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,62 +10,55 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
 public class BookRestController {
-    private final BookRepository bookRepository;
 
-    @PostMapping
-    public Book createbook(@RequestBody Book bookDetails){
-        return bookRepository.save(bookDetails);
-    }
+    private final BookService bookService;
 
     @GetMapping
-    public List<Book>getBook(){
-        return bookRepository.findAll();
+    public ResponseEntity<List<BookDTO.BookResponse>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 
     @GetMapping("/{id}")
-    public Book ResponseEntity(@PathVariable Long id){
-        Optional<Book> optionalBook = bookRepository.findById(id);
-        Book existBook = optionalBook.orElseThrow(
-                ()-> new BusinessException("Book Not Found", HttpStatus.NOT_FOUND)
-        );
-        return existBook;
+    public ResponseEntity<BookDTO.BookResponse> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 
-    @GetMapping("/isbn/{isbn}/")
-    public Book getBookIsbn(@PathVariable String isbn){
-        return bookRepository.findByIsbn(isbn).orElseThrow(
-                ()-> new BusinessException("Book Not Found", HttpStatus.NOT_FOUND)
-        );
+    @GetMapping("/isbn/{isbn}")
+    public ResponseEntity<BookDTO.BookResponse> getBookByIsbn(@PathVariable String isbn) {
+        return ResponseEntity.ok(bookService.getBookByIsbn(isbn));
     }
 
-    @PutMapping("/{id}")
-    public Book putBookId(@PathVariable Long id, @RequestBody Book bookDetails){
-        Book existBook = bookRepository.findById(id).orElseThrow(
-                ()-> new BusinessException("Book Not Found", HttpStatus.NOT_FOUND)
-        );
+    @GetMapping("/author/{author}")
+    public ResponseEntity<List<BookDTO.BookResponse>> getBooksByAuthor(@PathVariable String author) {
+        return ResponseEntity.ok(bookService.getBooksByAuthor(author));
+    }
 
-        existBook.setTitle(bookDetails.getTitle());
-        existBook.setAuthor(bookDetails.getAuthor());
-        existBook.setPrice(bookDetails.getPrice());
-        existBook.setPublishDate(bookDetails.getPublishDate());
+    @PostMapping
+    public ResponseEntity<BookDTO.BookResponse> createBook(
+            @Valid @RequestBody BookDTO.BookCreateRequest request) {
+        BookDTO.BookResponse created = bookService.createBook(request);
+        //HttpStatus.CREATED - 201
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
 
-        return bookRepository.save(existBook);
+    //PUT, PATCH 둘 다 받는다 (입력값이 있는 필드만 수정)
+    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
+    public ResponseEntity<BookDTO.BookResponse> updateBook(
+            @PathVariable Long id,
+            @Valid @RequestBody BookDTO.BookUpdateRequest request) {
+        return ResponseEntity.ok(bookService.updateBook(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable Long id){
-        Book existBook = bookRepository.findById(id).orElseThrow(
-                ()-> new BusinessException("Book Not Found", HttpStatus.NOT_FOUND)
-        );
-        bookRepository.delete(existBook);
-
-        return ResponseEntity.ok("Id = " + id + "Book이 삭제 되었습니다.");
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        //noContent() - 204
+        return ResponseEntity.noContent().build();
     }
 }

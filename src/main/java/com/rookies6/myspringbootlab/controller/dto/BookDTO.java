@@ -40,4 +40,41 @@ public class BookDTO {
             return book;
         }
     }
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BookUpdateRequest {
+        private String title;
+        private String author;
+
+        @Positive(message =  "가격은 0보다 커야 합니다")
+        private Integer price;
+
+        private LocalDate publishDate;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BookResponse{
+        private Long id;
+        private String title;
+        private String author;
+        private String isbn;
+        private Integer price;
+        private LocalDate publishDate;
+
+        public static BookResponse from(Book book){
+            return new BookResponse(
+            book.getId(),
+            book.getTitle(),
+            book.getAuthor(),
+            book.getIsbn(),
+            book.getPrice(),
+            book.getPublishDate()
+            );
+        }
+    }
 }

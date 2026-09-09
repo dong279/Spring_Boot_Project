@@ -1,4 +1,4 @@
-package com.rookies6.myspringbootlab.controller;
+package com.rookies6.myspringbootlab.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
