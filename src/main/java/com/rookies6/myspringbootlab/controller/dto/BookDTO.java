@@ -17,7 +17,7 @@ public class BookDTO {
         @NotBlank(message = "제목은 필수 입력 항목입니다.")
         private String title;
 
-        @NotBlank(message = "저자은 필수 입력 항목입니다.")
+        @NotBlank(message = "저자는 필수 입력 항목입니다.")
         private String author;
 
         @NotBlank(message = "ISBN은 필수 입력 항목입니다")
