@@ -68,8 +68,8 @@ public class BookService {
                 .build();
 
         // 상세정보가 함께 넘어온 경우에만 만들어 붙인다
-        if (request.getDetailRequest() != null) {
-            BookDetail detail = toDetailEntity(request.getDetailRequest());
+        if (request.getBookDetail() != null) {
+            BookDetail detail = toDetailEntity(request.getBookDetail());
             book.setBookDetail(detail);   // 편의 메서드가 detail.setBook(book)까지 해준다
         }
 
@@ -103,8 +103,8 @@ public class BookService {
             existBook.setPublishDate(request.getPublishDate());
         }
 
-        if (request.getDetailRequest() != null) {
-            updateDetail(existBook, request.getDetailRequest());
+        if (request.getBookDetail() != null) {
+            updateDetail(existBook, request.getBookDetail());
         }
 
         // 영속 상태이므로 변경 감지(Dirty Checking)로 UPDATE가 나간다. save는 생략 가능

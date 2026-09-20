@@ -38,7 +38,7 @@ public class BookDTO {
         private LocalDate publishDate;
 
         @Valid
-        private BookDetailDTO detailRequest;
+        private BookDetailDTO bookDetail;
     }
 
     @Data
@@ -65,7 +65,7 @@ public class BookDTO {
         private String isbn;
         private Integer price;
         private LocalDate publishDate;
-        private BookDetailResponse detail;
+        private BookDetailResponse bookDetail;
 
         public static Response fromEntity(Book book) {
             BookDetailResponse detailResponse = book.getBookDetail() != null
@@ -87,7 +87,7 @@ public class BookDTO {
                     .isbn(book.getIsbn())
                     .price(book.getPrice())
                     .publishDate(book.getPublishDate())
-                    .detail(detailResponse)
+                    .bookDetail(detailResponse)
                     .build();
         }
     }
